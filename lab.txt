@@ -1,0 +1,54 @@
+CREATE TABLE Contacts (
+    ID INT PRIMARY KEY IDENTITY,
+    FullName VARCHAR(25),
+    Address VARCHAR(25),
+    Birthday DATE
+);
+
+CREATE TABLE PhoneNumbers (
+    ID INT PRIMARY KEY IDENTITY,
+    Contact_ID INT,
+    PhoneNumber VARCHAR(15),
+    FOREIGN KEY (Contact_ID) REFERENCES Contacts(ID)
+);
+
+INSERT INTO Contacts (FullName, Address, Birthday) VALUES ('Nguyen Nam', '111 Nguyen Xien, Thanh Xuan, Ha Noi', '1987-11-18');
+
+INSERT INTO PhoneNumbers (Contact_ID, PhoneNumber) VALUES
+(1, '987654321'),
+(1, '09873452'),
+(1, '09832323'),
+(1, '09434343');
+
+SELECT * FROM Contacts;
+
+SELECT PhoneNumber FROM PhoneNumbers;
+
+SELECT * FROM Contacts ORDER BY FullName;
+
+SELECT * FROM Contacts WHERE Birthday = '1987-11-18';
+
+SELECT Contacts.FullName, COUNT(PhoneNumbers.ID) AS NumberOfPhoneNumbers
+FROM Contacts
+INNER JOIN PhoneNumbers ON Contacts.ID = PhoneNumbers.Contact_ID
+GROUP BY Contacts.FullName;
+
+SELECT COUNT(*)
+FROM Contacts
+WHERE MONTH(Birthday) = 12;
+
+SELECT Contacts.*, PhoneNumbers.PhoneNumber
+FROM Contacts
+INNER JOIN PhoneNumbers ON Contacts.ID = PhoneNumbers.Contact_ID;
+
+SELECT Contacts.*, PhoneNumbers.PhoneNumber
+FROM Contacts
+INNER JOIN PhoneNumbers ON Contacts.ID = PhoneNumbers.Contact_ID
+WHERE PhoneNumbers.PhoneNumber = '09434343';
+
+UPDATE Contacts
+SET Birthday = DATEADD(DAY, -1, GETDATE())
+WHERE Birthday > GETDATE();
+
+ALTER TABLE Contacts
+ADD StartDate DATE;
